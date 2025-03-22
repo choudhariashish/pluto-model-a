@@ -1,0 +1,36 @@
+genrule(
+    name = "pnode-demo",
+    srcs = [
+        ":pnode-server",
+        ":pnode-cli",
+        "pnode-config.txt",
+    ],
+    outs = [
+        "etc/pnode-config.txt",
+    ],
+    cmd = "cp $(location pnode-config.txt) $(location etc/pnode-config.txt)",
+    visibility = ["//visibility:public"],
+)
+
+cc_binary(
+    name = "pnode-server",
+    srcs = [
+        "pnode-server.cpp",
+    ],
+    deps = [
+        "//lib/PObject:PObject",
+        "//lib/PUtils:PUtils",
+    ],
+)
+
+cc_binary(
+    name = "pnode-cli",
+    srcs = [
+        "pnode-cli.cpp",
+    ],
+    deps = [
+        "//lib/PObject:PObject",
+        "//lib/PUtils:PUtils",
+        "//lib/PMessage:PMessage",
+    ],
+)

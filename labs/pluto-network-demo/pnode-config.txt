@@ -1,0 +1,37 @@
+{
+  "pnode-server": {
+    "serverIp": "127.0.0.1",
+    "port": 9898,
+    "nodeType": "server",
+    "nodeId": 0,
+    "maxNodeIds": 250,
+    "keepAliveUntilTimeMs": 10,
+    "maxNewMsgSize": 10,
+    "maxRspMsgSize": 10,
+    "logTransitMsgs": true
+  },
+
+  "pnode-cli": {
+    "serverIp": "127.0.0.1",
+    "port": 9898,
+    "nodeType": "client",
+    "nodeId": 2,
+    "maxNodeIds": 250,
+    "keepAliveUntilTimeMs": 10,
+    "maxNewMsgSize": 10,
+    "maxRspMsgSize": 10,
+    "logTransitMsgs": true
+  },
+
+  "pnode-client": {
+    "serverIp": "127.0.0.1",
+    "port": 9898,
+    "nodeType": "client",
+    "nodeId": 4,
+    "maxNodeIds": 250,
+    "keepAliveUntilTimeMs": 10,
+    "maxNewMsgSize": 10,
+    "maxRspMsgSize": 10,
+    "logTransitMsgs": true
+  }
+}

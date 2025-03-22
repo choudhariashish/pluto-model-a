@@ -1,0 +1,14 @@
+diff --git BUILD.bazel BUILD.bazel
+new file mode 100644
+index 0000000..5778b45
+--- /dev/null
++++ BUILD.bazel
+@@ -0,0 +1 @@
++cc_library(name = "testrepo_lib", srcs = ["api.c"], hdrs = ["api.h"], visibility = ["//visibility:public"])
+diff --git MODULE.bazel MODULE.bazel
+new file mode 100644
+index 0000000..b23e1e8
+--- /dev/null
++++ MODULE.bazel
+@@ -0,0 +1 @@
++module(name = "testrepo", version = "1.0")

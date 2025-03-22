@@ -1,0 +1,7 @@
+py_binary(
+    name = "app",
+    srcs = ["app.py"],
+    deps = [
+        "//lib/PUtils/python:PUtils",
+    ],
+)

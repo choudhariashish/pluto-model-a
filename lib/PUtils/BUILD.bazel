@@ -1,0 +1,16 @@
+cc_library(
+    name = "PUtils",
+    srcs = [
+        "PUtils.cpp",
+    ],
+    hdrs = [
+        "PUtils.h",
+    ],
+    includes = ["."],
+    deps = [
+        "//lib/PObject:PObject",
+        "@enet//:enet_lib",
+        "@rapidjson//:rapidjson_lib",
+    ],
+    visibility = ["//visibility:public"],
+)

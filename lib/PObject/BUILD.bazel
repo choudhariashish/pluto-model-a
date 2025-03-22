@@ -1,0 +1,11 @@
+cc_library(
+    name = "PObject",
+    srcs = [
+        "PObject.cpp",
+    ],
+    hdrs = [
+        "PObject.h",
+    ],
+    includes = ["."],
+    visibility = ["//visibility:public"],
+)
