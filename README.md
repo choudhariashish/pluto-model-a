@@ -15,8 +15,8 @@ vim /etc/ssh/sshd_config # Edit to allow "PermitRootLogin yes".
 systemctl restart sshd
 ```
 
-## Network
-### Build Node
+## Build Node
+### Network
 ```
 ip a
 wpa_passphrase <wifi name> <wifi password> > /etc/wpa_supplicant/wpa_supplicant.con # Comment the line that looks like "#psk=b3d43352".
@@ -32,7 +32,15 @@ iface wlan0 inet dhcp
 ip a # Note the new IP address on wlan0.
 ```
 
-### Robot Node
+### Install Bazel
+sudo apt-get update
+sudo apt-get install bazel-bootstrap
+sudo apt-get install bazel-rules-cc
+sudo apt-get install bazel-platforms
+bazel --version
+bazel 8.1.1
+
+## Robot Node
 ```
 ifconfig eth0 20.0.0.X
 ```
