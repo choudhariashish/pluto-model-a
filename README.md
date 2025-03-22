@@ -19,9 +19,16 @@ systemctl restart sshd
 ### Build Node
 ```
 ip a
-wpa_passphrase <wifi name> <wifi password> > /etc/wpa_supplicant/wpa_supplicant.con # Comment the "#psk=b3d43352" line.
+wpa_passphrase <wifi name> <wifi password> > /etc/wpa_supplicant/wpa_supplicant.con # Comment the line that looks like "#psk=b3d43352".
 wpa_supplicant -B -c /etc/wpa_supplicant/wpa_supplicant.conf -i wlan0
 dhclient wlan0
+
+# To make it permanent, Add the following in /etc/network/interfaces
+auto wlan0
+iface wlan0 inet dhcp
+    wpa-ssid "wifi name"
+    wpa-psk "wifi password"
+
 ip a # Note the new IP address on wlan0.
 ```
 
