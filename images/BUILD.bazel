@@ -1,0 +1,8 @@
+
+load("@rules_oci//oci:defs.bzl", "oci_image")
+
+oci_image(
+    name = "sim-image",
+    base = "@ubuntu-22-04",
+    cmd = ["/bin/bash"],
+)
