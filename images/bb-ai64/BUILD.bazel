@@ -1,0 +1,9 @@
+# BeagleBone AI-64 SD Card Image
+# Debian 13 XFCE with kernel v6.12
+# The actual download is defined in MODULE.bazel as an external repository
+
+filegroup(
+    name = "sdcard_image",
+    srcs = ["@bbai64_sdcard_image//file"],
+    visibility = ["//visibility:public"],
+)

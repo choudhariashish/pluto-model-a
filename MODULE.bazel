@@ -46,3 +46,12 @@ archive_override(
 #    ],
 #    remote = "https://github.com/choudhariashish/testrepo.git",
 #)
+
+# BeagleBone AI-64 SD Card Image
+http_file = use_repo_rule("@bazel_tools//tools/build_defs/repo:http.bzl", "http_file")
+
+http_file(
+    name = "bbai64_sdcard_image",
+    urls = ["https://files.beagle.cc/file/beagleboard-public-2021/images/bbai64-emmc-flasher-debian-13-xfce-v6.12-arm64-2025-08-28-12gb.img.xz"],
+    downloaded_file_path = "bbai64-emmc-flasher-debian-13-xfce-v6.12-arm64-2025-08-28-12gb.img.xz",
+)
