@@ -377,7 +377,7 @@ PObject::Status_t AppSettings::initialize(void)
         std::string nodesStr((std::istreambuf_iterator<char>(fileStream)),
                               std::istreambuf_iterator<char>());
         fileStream.close();
-        sprintf(json, "%s", nodesStr.c_str());
+        snprintf(json, sizeof(json), "%s", nodesStr.c_str());
     }
     else
     {
