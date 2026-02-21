@@ -2,8 +2,8 @@
 Model A Repository
 
 ## Image
-Download and prepare a eMMC flasher sdcard for bbai64 from,
-from => https://files.beagle.cc/file/beagleboard-public-2021/images/bbai64-emmc-flasher-debian-12.9-xfce-arm64-2025-03-05-12gb.img.xz
+Download and prepare an eMMC flasher sdcard for bbai64 from
+=> https://files.beagle.cc/file/beagleboard-public-2021/images/bbai64-emmc-flasher-debian-12.9-xfce-arm64-2025-03-05-12gb.img.xz
 
 Insert the sdcard, hold the Boot button and then power on. The led lights will start blinking in a running pattern. Light will be off once the sdcard image is copied to the eMMC.
 
