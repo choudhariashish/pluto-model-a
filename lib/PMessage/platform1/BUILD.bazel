@@ -1,3 +1,16 @@
+genrule(
+    name = "generate_platform1_pb",
+    srcs = ["platform1.proto"],
+    outs = [
+        "platform1.pb.h",
+        "platform1.pb.c",
+    ],
+    cmd = "$(location //lib/PMessage/nanopb-0.4.9.1-linux-x86/generator-bin:nanopb_generator) $(SRCS) -D $(@D) && " +
+          "mv $(@D)/lib/PMessage/platform1/platform1.pb.h $(location platform1.pb.h) && " +
+          "mv $(@D)/lib/PMessage/platform1/platform1.pb.c $(location platform1.pb.c)",
+    tools = ["//lib/PMessage/nanopb-0.4.9.1-linux-x86/generator-bin:nanopb_generator"],
+)
+
 cc_library(
     name = "platform1",
     srcs = [
