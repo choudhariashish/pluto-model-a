@@ -1,0 +1,3 @@
+# Use local Python toolchain from venv
+build --action_env=PYTHONPATH=
+build --action_env=PYTHONNOUSERSITE=1

@@ -1,14 +1,9 @@
-genrule(
+filegroup(
     name = "pnode-demo",
     srcs = [
         ":pnode-server",
         ":pnode-cli",
-        "pnode-config.txt",
     ],
-    outs = [
-        "etc/pnode-config.txt",
-    ],
-    cmd = "cp $(location pnode-config.txt) $(location etc/pnode-config.txt)",
     visibility = ["//visibility:public"],
 )
 
@@ -21,6 +16,9 @@ cc_binary(
         "//lib/PObject:PObject",
         "//lib/PUtils:PUtils",
     ],
+    data = [
+        "//etc/pluto-network-demo:pnode-config",
+    ],
 )
 
 cc_binary(
@@ -32,5 +30,8 @@ cc_binary(
         "//lib/PObject:PObject",
         "//lib/PUtils:PUtils",
         "//lib/PMessage:PMessage",
+    ],
+    data = [
+        "//etc/pluto-network-demo:pnode-config",
     ],
 )

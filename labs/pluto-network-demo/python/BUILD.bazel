@@ -1,0 +1,13 @@
+load("@rules_python//python:defs.bzl", "py_binary")
+
+py_binary(
+    name = "pnode-client",
+    srcs = ["pnode-client.py"],
+    data = [
+        "//etc/pluto-network-demo:pnode-config.src.txt",
+        "//etc/pluto-network-demo:pnode-config",
+    ],
+    deps = [
+        "//lib/PUtils/python:PUtils",
+    ],
+)

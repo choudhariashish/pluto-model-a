@@ -11,17 +11,31 @@
 #include "PUtils.h"
 #include "PMessage.h"
 
-#define NODES_FILE             "etc/pnode-config.txt"
 #define NODE_NAME              "pnode-cli"
 
 int main(int argc, char** argv)
 {
+    // Parse command-line arguments
+    std::string configPath = "pnode-config.txt";
+    int destNodeId = 0;
+ 
+    for (int i = 1; i < argc; i++) {
+        if (strcmp(argv[i], "-c") == 0 && i + 1 < argc) {
+            configPath = argv[i + 1];
+            i++; // Skip next argument since we consumed it
+        } else {
+            // First non-flag argument is the destination node ID
+            destNodeId = atoi(argv[i]);
+            break;
+        }
+    }
+
     uint64_t runNetworkForSec = 100 * 20;
     int periodMs = 10;
     PObject::setupTimeoutControl(periodMs);
 
     AppSettings appSettings("AppSettings");
-    appSettings.getSettings()->file = NODES_FILE;
+    appSettings.getSettings()->file = configPath.c_str();
     appSettings.initialize();
     NetworkNode node(NODE_NAME);
     auto s = node.getSettings();
@@ -48,11 +62,11 @@ int main(int argc, char** argv)
         {
             t0 = PObject::getTickMs() + 100;
 
-            // node.sendQuery(atoi(argv[3]), MessageId::GET_NODES, "node.sendQuery", &m, 1000);
+            // node.sendQuery(destNodeId, MessageId::GET_NODES, "node.sendQuery", &m, 1000);
             // node.sendQuery(0, MessageId::GET_NODES, "node.sendQuery", &m, 1000);
 
-            // node.send(atoi(argv[3], MessageId::INFO, "node.send");
-            node.sendQuery(atoi(argv[3]), MessageId::INFO, "node.sendQuery", &m, 1000);
+            // node.send(destNodeId, MessageId::INFO, "node.send");
+            node.sendQuery(destNodeId, MessageId::INFO, "node.sendQuery", &m, 1000);
         }
 
         if (NetworkNode::Status_t::PL_OK == node.recv(&m))

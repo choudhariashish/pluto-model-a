@@ -1,0 +1,12 @@
+load("@rules_python//python:defs.bzl", "py_library")
+
+py_library(
+    name = "PUtils",
+    srcs = ["PUtils.py"],
+    visibility = ["//visibility:public"],
+    deps = [
+        "@pluto_pip_deps//pyenet",
+        "@pluto_pip_deps//aiohttp",
+        "@pluto_pip_deps//python_socketio",
+    ],
+)

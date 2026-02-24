@@ -1,3 +1,7 @@
 bazel-*
 MODULE.bazel.*
-lib/PUtils/python/
+venv/
+__pycache__/
+*.pyc
+*.pyo
+*.pyd

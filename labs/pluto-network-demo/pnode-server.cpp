@@ -10,17 +10,25 @@
 #include "PObject.h"
 #include "PUtils.h"
 
-#define NODES_FILE             "etc/pnode-config.txt"
 #define NODE_NAME              "pnode-server"
 
 int main(int argc, char** argv)
 {
+    // Parse command-line arguments
+    std::string configPath = "pnode-config.txt";
+    for (int i = 1; i < argc; i++) {
+        if (strcmp(argv[i], "-c") == 0 && i + 1 < argc) {
+            configPath = argv[i + 1];
+            i++; // Skip next argument since we consumed it
+        }
+    }
+
     uint64_t runNetworkForSec = 100 * 20;
     int periodMs = 10;
     PObject::setupTimeoutControl(periodMs);
 
     AppSettings appSettings("AppSettings");
-    appSettings.getSettings()->file = NODES_FILE;
+    appSettings.getSettings()->file = configPath.c_str();
     appSettings.initialize();
     NetworkNode node(NODE_NAME);
     auto s = node.getSettings();

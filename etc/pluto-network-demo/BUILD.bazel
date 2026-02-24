@@ -1,0 +1,12 @@
+exports_files(
+    ["pnode-config.src.txt"],
+    visibility = ["//visibility:public"],
+)
+
+genrule(
+    name = "pnode-config",
+    srcs = ["pnode-config.src.txt"],
+    outs = ["pnode-config.txt"],
+    cmd = "cp $< $@",
+    visibility = ["//visibility:public"],
+)

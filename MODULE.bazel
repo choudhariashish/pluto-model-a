@@ -4,6 +4,21 @@ bazel_dep(name = "rules_foreign_cc", version = "0.14.0")
 bazel_dep(name = "platforms", version = "0.0.11")
 bazel_dep(name = "rules_oci", version = "2.2.5")
 
+python = use_extension("@rules_python//python/extensions:python.bzl", "python")
+python.toolchain(
+    configure_coverage_tool = True,
+    python_version = "3.12",
+)
+use_repo(python, "python_3_12")
+
+pip = use_extension("@rules_python//python/extensions:pip.bzl", "pip")
+pip.parse(
+    hub_name = "pluto_pip_deps",
+    python_version = "3.12",
+    requirements_lock = "//:requirements.txt",
+)
+use_repo(pip, "pluto_pip_deps")
+
 oci = use_extension("@rules_oci//oci:extensions.bzl", "oci")
 oci.pull(
     name = "ubuntu-22-04",

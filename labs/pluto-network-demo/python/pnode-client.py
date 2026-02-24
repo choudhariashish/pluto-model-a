@@ -1,13 +1,25 @@
 import sys
-sys.path.append('../../../lib/PUtils/python/')
+import argparse
+from lib.PUtils.python.PUtils import *
 
-from PUtils import *
-
-NODES_FILE = "../pnode.config"
 NODE_NAME  = "pnode-client"
 
+# Parse command-line arguments
+parser = argparse.ArgumentParser(description='PNode Client')
+parser.add_argument('-c', '--config', type=str, 
+                    default='../../../etc/pluto-network-demo/pnode-config.src.txt',
+                    help='Path to config file or directory containing pnode-config.txt')
+args = parser.parse_args()
+
+# Determine config file path
+import os
+if os.path.isdir(args.config):
+    config_path = os.path.join(args.config, 'pnode-config.src.txt')
+else:
+    config_path = args.config
+
 appSettings = AppSettings()
-s = appSettings.load(NODES_FILE)
+s = appSettings.load(config_path)
 
 node = NetworkNode()
 node.settings_ = s[NODE_NAME]
