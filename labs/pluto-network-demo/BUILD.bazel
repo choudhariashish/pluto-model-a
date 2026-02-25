@@ -26,6 +26,7 @@ cc_binary(
     srcs = [
         "pnode-cli.cpp",
     ],
+    defines = ["PLATFORM_1"],    # Adds -DPLATFORM_1 to the C++ compiler flags
     deps = [
         "//lib/PObject:PObject",
         "//lib/PUtils:PUtils",

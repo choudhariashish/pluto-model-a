@@ -3,8 +3,8 @@
 
 #include "PObject.h"
 
-#ifdef PLATFORM_TYPE
-  #include "platform1.pb.h"
+#ifdef PLATFORM_1
+#include "platform1.pb.h"
 #endif
 
 class PMessage : public PObject
