@@ -1,0 +1,45 @@
+#--------------------------------------------------------------------------
+# Build for ARM64
+# bazel build --config=arm64 //labs/ai64-demo:hello
+#
+# Build optimized for ARM64
+# bazel build --config=release-arm64 //labs/ai64-demo:hello
+#
+# Deploy to BeagleBone
+# bazel run //tools:deploy -- //labs/ai64-demo:hello root@192.168.55.102
+#--------------------------------------------------------------------------
+
+
+load("@rules_cc//cc:defs.bzl", "cc_binary")
+
+# Hello World application that can be built for host or ARM64
+cc_binary(
+    name = "hello",
+    srcs = ["hello.cpp"],
+    # Use select() to choose compiler flags based on target platform
+    copts = select({
+        "//toolchains:aarch64": ["-O2"],
+        "//toolchains:x86_64": ["-O2"],
+        "//conditions:default": ["-O2"],
+    }),
+    # Static link C++ libraries for ARM64 to avoid version conflicts
+    linkopts = select({
+        "//toolchains:aarch64": [
+            "-Wl,-Bstatic",
+            "-lstdc++",
+            "-Wl,-Bdynamic",
+            "-lm",
+            "-lc",
+        ],
+        "//conditions:default": [],
+    }),
+    visibility = ["//visibility:public"],
+)
+
+# Deploy script to copy binary to BeagleBone
+sh_binary(
+    name = "deploy",
+    srcs = ["deploy.sh"],
+    data = [":hello"],
+    visibility = ["//visibility:public"],
+)

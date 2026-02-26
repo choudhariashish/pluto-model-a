@@ -1,0 +1,7 @@
+# Deployment and utility tools
+
+sh_binary(
+    name = "deploy",
+    srcs = ["deploy_to_beaglebone.sh"],
+    visibility = ["//visibility:public"],
+)
