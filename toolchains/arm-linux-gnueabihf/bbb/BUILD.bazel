@@ -1,0 +1,41 @@
+load(":cc_toolchain_config.bzl", "cc_toolchain_config")
+
+package(default_visibility = ["//visibility:public"])
+
+cc_toolchain_suite(
+    name = "bbb_toolchain_suite",
+    toolchains = {
+        "armv7": ":bbb_toolchain",
+    },
+)
+
+filegroup(name = "empty")
+
+cc_toolchain(
+    name = "bbb_toolchain",
+    all_files = "@bbb_arm_gnu_toolchain//:compiler_pieces",
+    compiler_files = "@bbb_arm_gnu_toolchain//:compiler_pieces",
+    dwp_files = ":empty",
+    linker_files = "@bbb_arm_gnu_toolchain//:compiler_pieces",
+    objcopy_files = "@bbb_arm_gnu_toolchain//:objcopy",
+    strip_files = "@bbb_arm_gnu_toolchain//:strip",
+    supports_param_files = 1,
+    toolchain_config = ":bbb_toolchain_config",
+    toolchain_identifier = "bbb-armv7-toolchain",
+)
+
+cc_toolchain_config(name = "bbb_toolchain_config")
+
+toolchain(
+    name = "bbb_cc_toolchain",
+    exec_compatible_with = [
+        "@platforms//os:linux",
+        "@platforms//cpu:x86_64",
+    ],
+    target_compatible_with = [
+        "@platforms//os:linux",
+        "@platforms//cpu:armv7",
+    ],
+    toolchain = ":bbb_toolchain",
+    toolchain_type = "@bazel_tools//tools/cpp:toolchain_type",
+)

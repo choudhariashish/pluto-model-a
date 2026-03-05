@@ -1,0 +1,18 @@
+cc_library(
+    name = "PHal",
+    srcs = [
+        "PHal.cpp",
+    ],
+    hdrs = [
+        "PHal.h",
+    ],
+    includes = ["."],
+    deps = [
+        "//lib/PObject:PObject",
+    ],
+    linkopts = select({
+        "//toolchains:aarch64": ["-lgpiod"],
+        "//conditions:default": [],
+    }),
+    visibility = ["//visibility:public"],
+)

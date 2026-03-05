@@ -1,0 +1,76 @@
+#--------------------------------------------------------------------------
+# NVIDIA Orin Nano GPIO Demo
+#
+# Build for Orin Nano (uses ARM GNU Toolchain 11.3 for GLIBC 2.35):
+# bazel build --config=orin-nano //labs/orin-gpio-demo:gpio_demo
+# bazel build --config=orin-nano //labs/orin-gpio-demo:gpio_simple
+#
+# Build optimized for Orin Nano:
+# bazel build --config=release-orin-nano //labs/orin-gpio-demo:gpio_demo
+#
+# Deploy to Orin Nano:
+# ./labs/orin-gpio-demo/deploy.sh
+# or: bazel run //labs/orin-gpio-demo:deploy
+#--------------------------------------------------------------------------
+
+load("@rules_cc//cc:defs.bzl", "cc_binary")
+
+# Interactive GPIO demo that toggles output and reads input
+cc_binary(
+    name = "gpio_demo",
+    srcs = ["gpio_demo.cpp"],
+    deps = [
+        "//lib/PHal:PHal",
+        "//lib/PObject:PObject",
+    ],
+    copts = select({
+        "//toolchains:aarch64": ["-O2"],
+        "//toolchains:x86_64": ["-O2"],
+        "//conditions:default": ["-O2"],
+    }),
+    linkopts = select({
+        "//toolchains:aarch64": [
+            "-Wl,-Bstatic",
+            "-lstdc++",
+            "-Wl,-Bdynamic",
+            "-lm",
+            "-lc",
+        ],
+        "//conditions:default": [],
+    }),
+    visibility = ["//visibility:public"],
+)
+
+# Simple command-line GPIO utility
+cc_binary(
+    name = "gpio_simple",
+    srcs = ["gpio_simple.cpp"],
+    deps = [
+        "//lib/PHal:PHal",
+        "//lib/PObject:PObject",
+    ],
+    copts = select({
+        "//toolchains:aarch64": ["-O2"],
+        "//toolchains:x86_64": ["-O2"],
+        "//conditions:default": ["-O2"],
+    }),
+    linkopts = select({
+        "//toolchains:aarch64": [
+            "-Wl,-Bstatic",
+            "-lstdc++",
+            "-Wl,-Bdynamic",
+            "-lm",
+            "-lc",
+        ],
+        "//conditions:default": [],
+    }),
+    visibility = ["//visibility:public"],
+)
+
+# Deploy script to copy binaries to Orin Nano
+sh_binary(
+    name = "deploy",
+    srcs = ["deploy.sh"],
+    data = [":gpio_demo", ":gpio_simple"],
+    visibility = ["//visibility:public"],
+)

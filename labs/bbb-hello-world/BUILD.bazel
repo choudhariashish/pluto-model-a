@@ -1,0 +1,4 @@
+cc_binary(
+    name = "bbb-hello-world",
+    srcs = ["main.cpp"],
+)

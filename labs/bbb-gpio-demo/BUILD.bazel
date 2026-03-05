@@ -1,0 +1,14 @@
+cc_binary(
+    name = "bbb-gpio-demo",
+    srcs = [
+        "main.cpp",
+        "bbb_pin_map.cpp",
+        "bbb_pin_map.h",
+    ],
+    copts = [
+        "-std=c++11",
+        "-Wall",
+        "-O2",
+    ],
+    visibility = ["//visibility:public"],
+)

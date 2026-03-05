@@ -3,8 +3,8 @@
 # Directory structure:
 #   toolchains/
 #     arm64-linux-gnu/     # ARM64 Linux toolchains
-#       bbai64/            # BeagleBone AI-64 specific
-#     (future: other architectures like riscv64, armv7, etc.)
+#     arm-linux-gnueabihf/ # ARMv7 Linux toolchains
+#     (future: other architectures like riscv64, etc.)
 
 package(default_visibility = ["//visibility:public"])
 
@@ -18,24 +18,13 @@ platform(
 )
 
 # Platform for ARM64 (aarch64) Linux builds
-# Used by BeagleBone AI-64 and other ARM64 Linux targets
+# Used by NVIDIA Orin Nano and other ARM64 Linux targets
 platform(
     name = "linux_aarch64",
     constraint_values = [
         "@platforms//os:linux",
         "@platforms//cpu:aarch64",
     ],
-)
-
-# Platform specifically for BeagleBone AI-64
-# Inherits from linux_aarch64 but can have device-specific settings
-platform(
-    name = "bbai64",
-    constraint_values = [
-        "@platforms//os:linux",
-        "@platforms//cpu:aarch64",
-    ],
-    parents = [":linux_aarch64"],
 )
 
 # Config setting to detect when building for ARM64

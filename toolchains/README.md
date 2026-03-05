@@ -8,41 +8,36 @@ This directory contains cross-compilation toolchains organized by target archite
 toolchains/
 ├── BUILD.bazel              # Platform definitions and config settings
 ├── arm64-linux-gnu/         # ARM64 Linux toolchains
-│   └── bbai64/              # BeagleBone AI-64 specific toolchain
+│   └── orin-nano/           # NVIDIA Orin Nano specific toolchain
 │       ├── BUILD.bazel      # Toolchain registration
 │       ├── cc_toolchain_config.bzl  # Toolchain configuration
 │       └── toolchain.BUILD  # External toolchain BUILD file
-└── (future: riscv64-linux-gnu/, armv7-linux-gnueabihf/, etc.)
+├── arm-linux-gnueabihf/     # ARMv7 Linux toolchains
+│   └── bbb/                 # BeagleBone Black specific toolchain
+└── (future: riscv64-linux-gnu/, etc.)
 ```
 
 ## Available Toolchains
 
-### BeagleBone AI-64 (ARM64)
+### NVIDIA Orin Nano (ARM64)
 
-**Location:** `toolchains/arm64-linux-gnu/bbai64/`
+**Location:** `toolchains/arm64-linux-gnu/orin-nano/`
 
-**Target Platform:** BeagleBone AI-64 running Debian Bookworm
+**Target Platform:** NVIDIA Orin Nano running Ubuntu 22.04
 
-**Toolchain:** ARM GNU Toolchain 12.3.rel1
+**Toolchain:** ARM GNU Toolchain 11.3.rel1
 - **Architecture:** aarch64 (ARM64)
-- **glibc version:** 2.36 (compatible with Debian Bookworm)
-- **C++ Standard Library:** Statically linked libstdc++ to avoid version conflicts
+- **glibc version:** 2.35 (compatible with Ubuntu 22.04)
 
-**Usage:**
-```bash
-# Build for BeagleBone AI-64
-bazel build --config=arm64 //your/target
+### BeagleBone Black (ARMv7)
 
-# Build optimized release for BeagleBone AI-64
-bazel build --config=release-arm64 //your/target
+**Location:** `toolchains/arm-linux-gnueabihf/bbb/`
 
-# Deploy to BeagleBone AI-64
-bazel run //tools:deploy -- //your/target root@192.168.55.102
-```
+**Target Platform:** BeagleBone Black running Debian 7
 
-**Platform Targets:**
-- `//toolchains:linux_aarch64` - Generic ARM64 Linux platform
-- `//toolchains:bbai64` - BeagleBone AI-64 specific platform
+**Toolchain:** ARM GNU Toolchain 13.3.rel1
+- **Architecture:** ARMv7 hard-float
+- **glibc version:** 2.13+ compatible
 
 **Config Settings:**
 - `//toolchains:aarch64` - Detects ARM64 builds (use in `select()`)
@@ -110,7 +105,8 @@ cc_binary(
 
 | Toolchain | Target Device | OS | glibc | Tested |
 |-----------|--------------|-----|-------|--------|
-| bbai64 | BeagleBone AI-64 | Debian Bookworm | 2.36 | ✅ |
+| orin-nano | NVIDIA Orin Nano | Ubuntu 22.04 | 2.35 | ✅ |
+| bbb | BeagleBone Black | Debian 7 | 2.13 | ✅ |
 
 ## Notes
 

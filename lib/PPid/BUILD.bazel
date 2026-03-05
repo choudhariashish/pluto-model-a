@@ -1,0 +1,14 @@
+cc_library(
+    name = "PPid",
+    srcs = [
+        "PPid.cpp",
+    ],
+    hdrs = [
+        "PPid.h",
+    ],
+    includes = ["."],
+    deps = [
+        "//lib/PObject:PObject",
+    ],
+    visibility = ["//visibility:public"],
+)

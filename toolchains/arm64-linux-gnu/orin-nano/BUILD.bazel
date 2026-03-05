@@ -1,0 +1,36 @@
+# NVIDIA Orin Nano ARM64 Cross-Compilation Toolchain
+# This toolchain targets the NVIDIA Jetson Orin Nano platform running Ubuntu 22.04 LTS
+
+package(default_visibility = ["//visibility:public"])
+
+load(":cc_toolchain_config.bzl", "orin_nano_cc_toolchain_config")
+
+# Toolchain configuration for Orin Nano
+orin_nano_cc_toolchain_config(name = "orin_nano_toolchain_config")
+
+cc_toolchain(
+    name = "orin_nano_cc_toolchain",
+    all_files = "@orin_nano_arm_gnu_toolchain//:all_files",
+    compiler_files = "@orin_nano_arm_gnu_toolchain//:compiler_files",
+    linker_files = "@orin_nano_arm_gnu_toolchain//:linker_files",
+    ar_files = "@orin_nano_arm_gnu_toolchain//:ar_files",
+    objcopy_files = "@orin_nano_arm_gnu_toolchain//:all_files",
+    strip_files = "@orin_nano_arm_gnu_toolchain//:all_files",
+    dwp_files = "@orin_nano_arm_gnu_toolchain//:all_files",
+    toolchain_config = ":orin_nano_toolchain_config",
+    toolchain_identifier = "orin-nano-arm64-toolchain",
+)
+
+toolchain(
+    name = "orin_nano_toolchain",
+    exec_compatible_with = [
+        "@platforms//os:linux",
+        "@platforms//cpu:x86_64",
+    ],
+    target_compatible_with = [
+        "@platforms//os:linux",
+        "@platforms//cpu:aarch64",
+    ],
+    toolchain = ":orin_nano_cc_toolchain",
+    toolchain_type = "@bazel_tools//tools/cpp:toolchain_type",
+)

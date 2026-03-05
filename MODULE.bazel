@@ -62,22 +62,22 @@ archive_override(
 #    remote = "https://github.com/choudhariashish/testrepo.git",
 #)
 
-# BeagleBone AI-64 SD Card Image
-http_file = use_repo_rule("@bazel_tools//tools/build_defs/repo:http.bzl", "http_file")
-
-http_file(
-    name = "bbai64_sdcard_image",
-    urls = ["https://files.beagle.cc/file/beagleboard-public-2021/images/bbai64-emmc-flasher-debian-13-xfce-v6.12-arm64-2025-08-28-12gb.img.xz"],
-    downloaded_file_path = "bbai64-emmc-flasher-debian-13-xfce-v6.12-arm64-2025-08-28-12gb.img.xz",
-)
-
-# BeagleBone AI-64 ARM64 cross-compiler toolchain
-# Using ARM GNU Toolchain 12.3 for glibc 2.36 compatibility with Debian Bookworm
 http_archive = use_repo_rule("@bazel_tools//tools/build_defs/repo:http.bzl", "http_archive")
 
+# NVIDIA Orin Nano ARM64 cross-compiler toolchain
+# Using ARM GNU Toolchain 11.3 for glibc 2.35 compatibility with Ubuntu 22.04 LTS
 http_archive(
-    name = "bbai64_arm_gnu_toolchain",
-    urls = ["https://developer.arm.com/-/media/Files/downloads/gnu/12.3.rel1/binrel/arm-gnu-toolchain-12.3.rel1-x86_64-aarch64-none-linux-gnu.tar.xz"],
-    strip_prefix = "arm-gnu-toolchain-12.3.rel1-x86_64-aarch64-none-linux-gnu",
-    build_file = "//toolchains/arm64-linux-gnu/bbai64:toolchain.BUILD",
+    name = "orin_nano_arm_gnu_toolchain",
+    urls = ["https://developer.arm.com/-/media/Files/downloads/gnu/11.3.rel1/binrel/arm-gnu-toolchain-11.3.rel1-x86_64-aarch64-none-linux-gnu.tar.xz"],
+    strip_prefix = "arm-gnu-toolchain-11.3.rel1-x86_64-aarch64-none-linux-gnu",
+    build_file = "//toolchains/arm64-linux-gnu/orin-nano:toolchain.BUILD",
+)
+
+# BeagleBone Black ARMv7 cross-compiler toolchain
+# Using ARM GNU Toolchain 13.3 for ARMv7 hard-float (compatible with glibc 2.13+)
+http_archive(
+    name = "bbb_arm_gnu_toolchain",
+    urls = ["https://developer.arm.com/-/media/Files/downloads/gnu/13.3.rel1/binrel/arm-gnu-toolchain-13.3.rel1-x86_64-arm-none-linux-gnueabihf.tar.xz"],
+    strip_prefix = "arm-gnu-toolchain-13.3.rel1-x86_64-arm-none-linux-gnueabihf",
+    build_file = "//toolchains/arm-linux-gnueabihf/bbb:toolchain.BUILD",
 )

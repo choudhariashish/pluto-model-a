@@ -3,7 +3,7 @@
 
 #include "PObject.h"
 #include "PHal.h"
-#include "pid_controller.h"
+#include "PPid.h"
 
 class CompObject : public PObject
 {
@@ -31,8 +31,8 @@ public:
         PObject::State_t controlMode;    // PL_SPEED_MODE/PL_MANUAL_MODE
 
         // Edit directly for speed/manual mode.
-        PObject::State_t m1Dir;          // PL_FORWARD/PL_REVERSE
-        PObject::State_t m2Dir;          // PL_FORWARD/PL_REVERSE
+        volatile PObject::State_t m1Dir;          // PL_FORWARD/PL_REVERSE
+        volatile PObject::State_t m2Dir;          // PL_FORWARD/PL_REVERSE
 
         // Edit directly for manual mode.
         volatile int m1TargetDutyCycle;           // 0-100 percent
@@ -41,6 +41,20 @@ public:
         // Edit directly for speed mode.
         volatile int m1TargetCprSpeed;            // @TODO
         volatile int m2TargetCprSpeed;            // @TODO
+
+        // PID configuration for M1
+        float m1PidKp;
+        float m1PidKi;
+        float m1PidKd;
+        float m1PidMin;
+        float m1PidMax;
+
+        // PID configuration for M2
+        float m2PidKp;
+        float m2PidKi;
+        float m2PidKd;
+        float m2PidMin;
+        float m2PidMax;
 
         PIDController m1Pid;
         PIDController m2Pid;
