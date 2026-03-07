@@ -2,6 +2,8 @@
 
 #include <sys/time.h>
 
+PObject::LogDestination PObject::logDestination = PObject::PL_SYSLOG;
+
 static int TimeoutValueUs = 0;
 static void TimerCallback(int sig);
 
@@ -29,3 +31,53 @@ void PObject::setupTimeoutControl(uint32_t millisec)
     TimeoutValueUs = 1000 * tickPeriodMs;
     TimerCallback(0);    // Kick off.
 }
+
+State_t PObject::writeFile(const char* filename, const char* content)
+{
+    std::ofstream file(filename);
+    if (file.is_open())
+    {
+        file << content;
+        file.close();
+        return Status_t::PL_OK;
+    }
+    return Status_t::PL_NOT_OK;
+}
+
+void PObject::Log(LogLevel level, const char* format, ...)
+{
+    const char* levelStr[] = {"ERROR", "WARN", "INFO", "DEBUG"};
+    char buffer[1024];
+    int len = snprintf(buffer, sizeof(buffer), "%s: ", levelStr[level]);
+
+    va_list args;
+    va_start(args, format);
+    vsnprintf(buffer + len, sizeof(buffer) - len, format, args);
+    va_end(args);
+
+    if (PObject::logDestination == PObject::PL_STDOUT || PObject::logDestination == PObject::PL_BOTH)
+    {
+        printf("%s\n", buffer);
+    }
+
+    if (PObject::logDestination == PObject::PL_SYSLOG || PObject::logDestination == PObject::PL_BOTH)
+    {
+        if (level == LogLevel::PL_DEBUG)
+        {
+            syslog(LOG_DEBUG, "%s", buffer);
+        }
+        else if (level == LogLevel::PL_INFO)
+        {
+            syslog(LOG_INFO, "%s", buffer);
+        }
+        else if (level == LogLevel::PL_WARN)
+        {
+            syslog(LOG_WARNING, "%s", buffer);
+        }
+        else if (level == LogLevel::PL_ERROR)
+        {
+            syslog(LOG_ERR, "%s", buffer);
+        }
+    }
+}
+

@@ -1,99 +1,63 @@
 #include "PHal.h"
 
-#include <gpiod.h>
-
 PObject::Status_t HalGpio::initialize(void)
 {
-    settings_.chipObj = gpiod_chip_open_by_name(settings_.gpioChipName);
-    if (!settings_.chipObj)
+#if PLATFORM == BBB
+    std::string gpioPath = "/sys/class/gpio/gpioX/";
+
+    if      (HAL_GPIO_1 == settings_.gpio) { gpioPath = "/sys/class/gpio/gpio30/"; }
+    else if (HAL_GPIO_2 == settings_.gpio) { gpioPath = "/sys/class/gpio/gpio26/"; }
+    else if (HAL_GPIO_3 == settings_.gpio) { gpioPath = "/sys/class/gpio/gpio14/"; }
+    else if (HAL_GPIO_4 == settings_.gpio) { gpioPath = "/sys/class/gpio/gpio44/"; }
+    else return PObject::Status_t::PL_NOT_OK;
+
+
+    if (settings_.mode == PObject::State_t::PL_OUTPUT)
     {
-        printf("Cannot open gpio file %s\n", settings_.gpioChipName);
+        if (writeFile((gpioPath + "direction").c_str(), "out") != PObject::Status_t::PL_OK)
+        {
+            return PObject::Status_t::PL_NOT_OK;
+        }
+    }
+    else if (settings_.mode == PObject::State_t::PL_INPUT)
+    {
+        if (writeFile((gpioPath + "direction").c_str(), "in") != PObject::Status_t::PL_OK)
+        {
+            return PObject::Status_t::PL_NOT_OK;
+        }
+    }
+    else if (settings_.mode == PObject::State_t::PL_RISING_EVENT_COUNT)
+    {
+        if (writeFile((gpioPath + "direction").c_str(), "in") != PObject::Status_t::PL_OK)
+        {
+            return PObject::Status_t::PL_NOT_OK;
+        }
+        if (writeFile((gpioPath + "edge").c_str(), "rising") != PObject::Status_t::PL_OK)
+        {
+            return PObject::Status_t::PL_NOT_OK;
+        }
+    }
+    else
+    {
         return PObject::Status_t::PL_NOT_OK;
     }
+#endif
 
-    settings_.lineObj = gpiod_chip_get_line(settings_.chipObj, settings_.lineNum);
-    if (!settings_.lineObj)
-    {
-        printf("Cannot open line file %s\n", settings_.gpioChipName);
-        gpiod_chip_close(settings_.chipObj);
-        return PObject::Status_t::PL_NOT_OK;
-    }
-
-    if (PObject::State_t::PL_OUTPUT == settings_.mode)
-    {
-        int ret = gpiod_line_request_output(settings_.lineObj, "consumer", 0);    // 0 is default output.
-        if (ret < 0)
-        {
-            printf("Request line as output failed %s\n", settings_.gpioChipName);
-            gpiod_line_release(settings_.lineObj);
-            gpiod_chip_close(settings_.chipObj);
-            return PObject::Status_t::PL_NOT_OK;
-        }
-    }
-
-    if (PObject::State_t::PL_INPUT == settings_.mode)
-    {
-        int ret = gpiod_line_request_input(settings_.lineObj, "consumer");
-        if (ret < 0)
-        {
-            printf("Request line as input failed %s\n", settings_.gpioChipName);
-            gpiod_line_release(settings_.lineObj);
-            gpiod_chip_close(settings_.chipObj);
-            return PObject::Status_t::PL_NOT_OK;
-        }
-    }
-
-    if (PObject::State_t::PL_RISING_EVENT_COUNT == settings_.mode)
-    {
-        int ret = gpiod_line_request_rising_edge_events(settings_.lineObj, "consumer");
-        if (ret < 0)
-        {
-            printf("Request line as rising edge events failed %s\n", settings_.gpioChipName);
-            gpiod_line_release(settings_.lineObj);
-            gpiod_chip_close(settings_.chipObj);
-            return PObject::Status_t::PL_NOT_OK;
-        }
-    }
     return PObject::Status_t::PL_OK;
 }
 
 PObject::Status_t HalGpio::shutdown(void)
 {
-    gpiod_line_release(settings_.lineObj);
-    gpiod_chip_close(settings_.chipObj);
     return PObject::Status_t::PL_OK;
 }
 
 int HalGpio::read(void)
 {
-    int value = 0;
     if (PObject::State_t::PL_INPUT == settings_.mode)
     {
-        value = gpiod_line_get_value(settings_.lineObj);
-        if (value < 0)
-        {
-            printf("Read line value failed %s=>%d\n", settings_.gpioChipName, settings_.lineNum);
-        }
     }
     if (PObject::State_t::PL_RISING_EVENT_COUNT == settings_.mode)
     {
-        struct gpiod_line_event event;
-        struct timespec ts = { 3, 0 };
-        int ret = gpiod_line_event_wait(settings_.lineObj, &ts);
-        if (ret < 0)
-        {
-            printf("Wait event notification failed\n");
-            value = 0;
-        }
-        else if (ret == 0)
-        {
-            value = 0;
-        }
-        else
-        {
-            ret = gpiod_line_event_read(settings_.lineObj, &event);
-            if (ret == 0) data_.events++;
-        }
     }
     return value;
 }
@@ -102,15 +66,34 @@ PObject::Status_t HalGpio::write(int value)
 {
     if (PObject::State_t::PL_OUTPUT == settings_.mode)
     {
-        int ret = gpiod_line_set_value(settings_.lineObj, value);
-        if (ret < 0)
-        {
-            printf("Set line value failed %s=>%d\n", settings_.gpioChipName, settings_.lineNum);
-            return PObject::Status_t::PL_NOT_OK;
-        }
     }
     return PObject::Status_t::PL_OK;
 }
+
+PObject::Status_t HalGpio::run()
+{
+    return PObject::Status_t::PL_OK;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 PObject::Status_t HalPwm::initialize(void)
 {

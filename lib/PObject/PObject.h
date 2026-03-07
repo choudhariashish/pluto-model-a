@@ -11,9 +11,30 @@ class PObject
 {
 public:
     // For API return status.
-    enum Status_t { PL_OK, PL_NOT_OK };
+    enum Status_t
+    {
+        PL_OK,
+        PL_NOT_OK
+    };
     // For stateful processes.
-    enum State_t { PL_BUSY, PL_READY, PL_DONE, PL_ENABLE, PL_DISABLE, PL_ERROR, PL_INPUT, PL_OUTPUT, PL_RISING_EVENT_COUNT, PL_FORWARD, PL_REVERSE, PL_STOP, PL_PAUSE, PL_MANUAL_MODE, PL_SPEED_MODE };
+    enum State_t
+    {
+        PL_BUSY,
+        PL_READY,
+        PL_DONE,
+        PL_ENABLE,
+        PL_DISABLE,
+        PL_ERROR,
+        PL_INPUT,
+        PL_OUTPUT,
+        PL_RISING_EVENT_COUNT,
+        PL_FORWARD,
+        PL_REVERSE,
+        PL_STOP,
+        PL_PAUSE,
+        PL_MANUAL_MODE,
+        PL_SPEED_MODE
+    };
 
     PObject(const char* name) { name_ = name; }
 
@@ -37,6 +58,18 @@ public:
     static uint64_t getTickPeriodMs(void);
     volatile static uint64_t tickMs;
     volatile static uint64_t tickPeriodMs;
+
+    /// Returns PL_OK on success, PL_NOT_OK on failure.
+    static State_t writeFile(const char* filename, const char* content);
+
+
+    enum LogDestination { PL_SYSLOG, PL_STDOUT, PL_BOTH };
+    static LogDestination logDestination;
+
+    enum LogLevel { PL_ERROR, PL_WARN, PL_INFO, PL_DEBUG };
+    /// Log levels: ERROR, WARN, INFO, DEBUG
+    /// Error/Warn/Info/Debug logging.
+    static void Log(LogLevel level, const char* format, ...);
 
 private:
     struct ObjectType objectType_;

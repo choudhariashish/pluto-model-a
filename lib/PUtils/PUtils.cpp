@@ -398,3 +398,4 @@ PObject::Status_t AppSettings::shutdown(void)
 {
     return Status_t::PL_OK;
 }
+
