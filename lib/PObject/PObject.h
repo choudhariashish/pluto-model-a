@@ -61,7 +61,7 @@ public:
 
     /// Returns PL_OK on success, PL_NOT_OK on failure.
     static State_t writeFile(const char* filename, const char* content);
-
+    static State_t readFile(const char* filename, char* content, size_t size);
 
     enum LogDestination { PL_SYSLOG, PL_STDOUT, PL_BOTH };
     static LogDestination logDestination;

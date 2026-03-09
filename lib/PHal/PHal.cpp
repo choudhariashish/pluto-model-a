@@ -3,12 +3,26 @@
 PObject::Status_t HalGpio::initialize(void)
 {
 #if PLATFORM == BBB
-    std::string gpioPath = "/sys/class/gpio/gpioX/";
-
     if      (HAL_GPIO_1 == settings_.gpio) { gpioPath = "/sys/class/gpio/gpio30/"; }
     else if (HAL_GPIO_2 == settings_.gpio) { gpioPath = "/sys/class/gpio/gpio26/"; }
     else if (HAL_GPIO_3 == settings_.gpio) { gpioPath = "/sys/class/gpio/gpio14/"; }
     else if (HAL_GPIO_4 == settings_.gpio) { gpioPath = "/sys/class/gpio/gpio44/"; }
+    else if (HAL_GPIO_5 == settings_.gpio) { gpioPath = "/sys/class/gpio/gpio60/"; }
+    else if (HAL_GPIO_6 == settings_.gpio) { gpioPath = "/sys/class/gpio/gpio31/"; }
+    else if (HAL_GPIO_7 == settings_.gpio) { gpioPath = "/sys/class/gpio/gpio48/"; }
+    else if (HAL_GPIO_8 == settings_.gpio) { gpioPath = "/sys/class/gpio/gpio49/"; }
+    else if (HAL_GPIO_9 == settings_.gpio) { gpioPath = "/sys/class/gpio/gpio15/"; }
+    else if (HAL_GPIO_10 == settings_.gpio) { gpioPath = "/sys/class/gpio/gpio115/"; }
+    else if (HAL_GPIO_11 == settings_.gpio) { gpioPath = "/sys/class/gpio/gpio112/"; }
+    else if (HAL_GPIO_12 == settings_.gpio) { gpioPath = "/sys/class/gpio/gpio66/"; }
+    else if (HAL_GPIO_13 == settings_.gpio) { gpioPath = "/sys/class/gpio/gpio67/"; }
+    else if (HAL_GPIO_14 == settings_.gpio) { gpioPath = "/sys/class/gpio/gpio69/"; }
+    else if (HAL_GPIO_15 == settings_.gpio) { gpioPath = "/sys/class/gpio/gpio68/"; }
+    else if (HAL_GPIO_16 == settings_.gpio) { gpioPath = "/sys/class/gpio/gpio45/"; }
+    else if (HAL_GPIO_17 == settings_.gpio) { gpioPath = "/sys/class/gpio/gpio47/"; }
+    else if (HAL_GPIO_18 == settings_.gpio) { gpioPath = "/sys/class/gpio/gpio46/"; }
+    else if (HAL_GPIO_19 == settings_.gpio) { gpioPath = "/sys/class/gpio/gpio27/"; }
+    else if (HAL_GPIO_20 == settings_.gpio) { gpioPath = "/sys/class/gpio/gpio65/"; }
     else return PObject::Status_t::PL_NOT_OK;
 
 
@@ -36,6 +50,31 @@ PObject::Status_t HalGpio::initialize(void)
         {
             return PObject::Status_t::PL_NOT_OK;
         }
+
+        settings_.risingEdgeDetection = true;
+
+        // Start monitoring thread as a lambda function.
+        monitoringThread_ = std::thread([this]()
+        {
+            // In this thread, we will monitor the GPIO pin for events
+            // in debounceTimeMs period and update the freqHz count accordingly.
+            while (true == settings_.risingEdgeDetection)
+            {
+                uint64_t startTime = PObject::getCurrentTimeMs();
+                while (PObject::getCurrentTimeMs() < startTime + settings_.debounceTimeMs)
+                {
+                    if (data_.valueCurrent != data_.valuePrevious)
+                    {
+                        data_.valueToggleCount++;
+                    }
+                    data_.valuePrevious = data_.valueCurrent;
+
+                    if (false == settings_.risingEdgeDetection) break;
+                }
+                data_.freqHz = data_.valueToggleCount * 1000 / settings_.debounceTimeMs;
+                data_.valueToggleCount = 0;
+            }
+        });
     }
     else
     {
@@ -55,11 +94,13 @@ int HalGpio::read(void)
 {
     if (PObject::State_t::PL_INPUT == settings_.mode)
     {
+        char valueStr[16];
+        if (PObject::readFile((gpioPath + "value").c_str(), valueStr, sizeof(valueStr)) == PObject::Status_t::PL_OK)
+        {
+            data_.valueCurrent = atoi(valueStr);
+        }
     }
-    if (PObject::State_t::PL_RISING_EVENT_COUNT == settings_.mode)
-    {
-    }
-    return value;
+    return data_.valueCurrent;
 }
 
 PObject::Status_t HalGpio::write(int value)
