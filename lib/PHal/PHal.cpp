@@ -3,50 +3,50 @@
 PObject::Status_t HalGpio::initialize(void)
 {
 #if PLATFORM == BBB
-    if      (HAL_GPIO_1 == settings_.gpio) { gpioPath = "/sys/class/gpio/gpio30/"; }
-    else if (HAL_GPIO_2 == settings_.gpio) { gpioPath = "/sys/class/gpio/gpio26/"; }
-    else if (HAL_GPIO_3 == settings_.gpio) { gpioPath = "/sys/class/gpio/gpio14/"; }
-    else if (HAL_GPIO_4 == settings_.gpio) { gpioPath = "/sys/class/gpio/gpio44/"; }
-    else if (HAL_GPIO_5 == settings_.gpio) { gpioPath = "/sys/class/gpio/gpio60/"; }
-    else if (HAL_GPIO_6 == settings_.gpio) { gpioPath = "/sys/class/gpio/gpio31/"; }
-    else if (HAL_GPIO_7 == settings_.gpio) { gpioPath = "/sys/class/gpio/gpio48/"; }
-    else if (HAL_GPIO_8 == settings_.gpio) { gpioPath = "/sys/class/gpio/gpio49/"; }
-    else if (HAL_GPIO_9 == settings_.gpio) { gpioPath = "/sys/class/gpio/gpio15/"; }
-    else if (HAL_GPIO_10 == settings_.gpio) { gpioPath = "/sys/class/gpio/gpio115/"; }
-    else if (HAL_GPIO_11 == settings_.gpio) { gpioPath = "/sys/class/gpio/gpio112/"; }
-    else if (HAL_GPIO_12 == settings_.gpio) { gpioPath = "/sys/class/gpio/gpio66/"; }
-    else if (HAL_GPIO_13 == settings_.gpio) { gpioPath = "/sys/class/gpio/gpio67/"; }
-    else if (HAL_GPIO_14 == settings_.gpio) { gpioPath = "/sys/class/gpio/gpio69/"; }
-    else if (HAL_GPIO_15 == settings_.gpio) { gpioPath = "/sys/class/gpio/gpio68/"; }
-    else if (HAL_GPIO_16 == settings_.gpio) { gpioPath = "/sys/class/gpio/gpio45/"; }
-    else if (HAL_GPIO_17 == settings_.gpio) { gpioPath = "/sys/class/gpio/gpio47/"; }
-    else if (HAL_GPIO_18 == settings_.gpio) { gpioPath = "/sys/class/gpio/gpio46/"; }
-    else if (HAL_GPIO_19 == settings_.gpio) { gpioPath = "/sys/class/gpio/gpio27/"; }
-    else if (HAL_GPIO_20 == settings_.gpio) { gpioPath = "/sys/class/gpio/gpio65/"; }
+    if      (HAL_GPIO_1 == settings_.gpio) { gpioPath_ = "/sys/class/gpio/gpio30/"; }
+    else if (HAL_GPIO_2 == settings_.gpio) { gpioPath_ = "/sys/class/gpio/gpio26/"; }
+    else if (HAL_GPIO_3 == settings_.gpio) { gpioPath_ = "/sys/class/gpio/gpio14/"; }
+    else if (HAL_GPIO_4 == settings_.gpio) { gpioPath_ = "/sys/class/gpio/gpio44/"; }
+    else if (HAL_GPIO_5 == settings_.gpio) { gpioPath_ = "/sys/class/gpio/gpio60/"; }
+    else if (HAL_GPIO_6 == settings_.gpio) { gpioPath_ = "/sys/class/gpio/gpio31/"; }
+    else if (HAL_GPIO_7 == settings_.gpio) { gpioPath_ = "/sys/class/gpio/gpio48/"; }
+    else if (HAL_GPIO_8 == settings_.gpio) { gpioPath_ = "/sys/class/gpio/gpio49/"; }
+    else if (HAL_GPIO_9 == settings_.gpio) { gpioPath_ = "/sys/class/gpio/gpio15/"; }
+    else if (HAL_GPIO_10 == settings_.gpio) { gpioPath_ = "/sys/class/gpio/gpio115/"; }
+    else if (HAL_GPIO_11 == settings_.gpio) { gpioPath_ = "/sys/class/gpio/gpio112/"; }
+    else if (HAL_GPIO_12 == settings_.gpio) { gpioPath_ = "/sys/class/gpio/gpio66/"; }
+    else if (HAL_GPIO_13 == settings_.gpio) { gpioPath_ = "/sys/class/gpio/gpio67/"; }
+    else if (HAL_GPIO_14 == settings_.gpio) { gpioPath_ = "/sys/class/gpio/gpio69/"; }
+    else if (HAL_GPIO_15 == settings_.gpio) { gpioPath_ = "/sys/class/gpio/gpio68/"; }
+    else if (HAL_GPIO_16 == settings_.gpio) { gpioPath_ = "/sys/class/gpio/gpio45/"; }
+    else if (HAL_GPIO_17 == settings_.gpio) { gpioPath_ = "/sys/class/gpio/gpio47/"; }
+    else if (HAL_GPIO_18 == settings_.gpio) { gpioPath_ = "/sys/class/gpio/gpio46/"; }
+    else if (HAL_GPIO_19 == settings_.gpio) { gpioPath_ = "/sys/class/gpio/gpio27/"; }
+    else if (HAL_GPIO_20 == settings_.gpio) { gpioPath_ = "/sys/class/gpio/gpio65/"; }
     else return PObject::Status_t::PL_NOT_OK;
 
 
     if (settings_.mode == PObject::State_t::PL_OUTPUT)
     {
-        if (writeFile((gpioPath + "direction").c_str(), "out") != PObject::Status_t::PL_OK)
+        if (writeFile((gpioPath_ + "direction").c_str(), "out") != PObject::Status_t::PL_OK)
         {
             return PObject::Status_t::PL_NOT_OK;
         }
     }
     else if (settings_.mode == PObject::State_t::PL_INPUT)
     {
-        if (writeFile((gpioPath + "direction").c_str(), "in") != PObject::Status_t::PL_OK)
+        if (writeFile((gpioPath_ + "direction").c_str(), "in") != PObject::Status_t::PL_OK)
         {
             return PObject::Status_t::PL_NOT_OK;
         }
     }
     else if (settings_.mode == PObject::State_t::PL_RISING_EVENT_COUNT)
     {
-        if (writeFile((gpioPath + "direction").c_str(), "in") != PObject::Status_t::PL_OK)
+        if (writeFile((gpioPath_ + "direction").c_str(), "in") != PObject::Status_t::PL_OK)
         {
             return PObject::Status_t::PL_NOT_OK;
         }
-        if (writeFile((gpioPath + "edge").c_str(), "rising") != PObject::Status_t::PL_OK)
+        if (writeFile((gpioPath_ + "edge").c_str(), "rising") != PObject::Status_t::PL_OK)
         {
             return PObject::Status_t::PL_NOT_OK;
         }
@@ -95,7 +95,7 @@ int HalGpio::read(void)
     if (PObject::State_t::PL_INPUT == settings_.mode)
     {
         char valueStr[16];
-        if (PObject::readFile((gpioPath + "value").c_str(), valueStr, sizeof(valueStr)) == PObject::Status_t::PL_OK)
+        if (PObject::readFile((gpioPath_ + "value").c_str(), valueStr, sizeof(valueStr)) == PObject::Status_t::PL_OK)
         {
             data_.valueCurrent = atoi(valueStr);
         }
@@ -107,6 +107,10 @@ PObject::Status_t HalGpio::write(int value)
 {
     if (PObject::State_t::PL_OUTPUT == settings_.mode)
     {
+        // Write the value to the GPIO pin
+        char valueStr[16];
+        snprintf(valueStr, sizeof(valueStr), "%d", value);
+        PObject::writeFile((gpioPath_ + "value").c_str(), valueStr);
     }
     return PObject::Status_t::PL_OK;
 }

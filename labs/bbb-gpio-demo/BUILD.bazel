@@ -10,5 +10,9 @@ cc_binary(
         "-Wall",
         "-O2",
     ],
+    deps = [
+        "//lib/PHal",
+        "//lib/PObject",
+    ],
     visibility = ["//visibility:public"],
 )

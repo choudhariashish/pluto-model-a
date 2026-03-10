@@ -56,17 +56,18 @@ public:
     static void timeout(void);
     static uint64_t getTickMs(void);
     static uint64_t getTickPeriodMs(void);
+    static uint64_t getCurrentTimeMs(void);
     volatile static uint64_t tickMs;
     volatile static uint64_t tickPeriodMs;
 
     /// Returns PL_OK on success, PL_NOT_OK on failure.
-    static State_t writeFile(const char* filename, const char* content);
-    static State_t readFile(const char* filename, char* content, size_t size);
+    static Status_t writeFile(const char* filename, const char* content);
+    static Status_t readFile(const char* filename, char* content, size_t size);
 
     enum LogDestination { PL_SYSLOG, PL_STDOUT, PL_BOTH };
     static LogDestination logDestination;
 
-    enum LogLevel { PL_ERROR, PL_WARN, PL_INFO, PL_DEBUG };
+    enum LogLevel { PL_LOG_ERROR, PL_LOG_WARN, PL_LOG_INFO, PL_LOG_DEBUG };
     /// Log levels: ERROR, WARN, INFO, DEBUG
     /// Error/Warn/Info/Debug logging.
     static void Log(LogLevel level, const char* format, ...);

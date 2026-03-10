@@ -112,85 +112,87 @@ const PinInfo* PinMap::GetPinInfo(const std::string& pin_name) {
 void PinMap::PrintPinMap() {
     std::cout << "\n=== BeagleBone Black Pin Map ===\n\n";
     
-    // P8 Header - side by side layout
+    // P8 Header - compact side by side layout
     std::cout << "P8 Header:\n";
-    std::cout << "Row1  Pin      Function    GPIO#  PWM            Notes              ||  Row2  Pin      Function    GPIO#  PWM            Notes\n";
-    std::cout << std::string(150, '=') << "\n";
+    std::cout << "Row1        Pin     Function   GPIO#  ||  Row2       Pin     Function   GPIO#\n";
+    std::cout << "=============================================================================\n";
     
-    for (int i = 1; i <= 46; i += 2) {
-        std::string pin_odd = "P8." + std::to_string(i);
-        std::string pin_even = "P8." + std::to_string(i + 1);
+    for (int row = 1; row <= 23; row++) {
+        int pin_odd = row * 2 - 1;
+        int pin_even = row * 2;
         
-        std::map<std::string, PinInfo>::const_iterator it_odd = p8_pins.find(pin_odd);
-        std::map<std::string, PinInfo>::const_iterator it_even = p8_pins.find(pin_even);
+        std::string pin_odd_name = "P8." + std::to_string(pin_odd);
+        std::string pin_even_name = "P8." + std::to_string(pin_even);
         
-        // Row 1 (odd pins)
+        auto it_odd = p8_pins.find(pin_odd_name);
+        auto it_even = p8_pins.find(pin_even_name);
+
+        // Row number and odd pin
+        std::cout << std::left << std::setw(6) << row;
         if (it_odd != p8_pins.end()) {
             const PinInfo& info = it_odd->second;
-            std::cout << std::left << std::setw(6) << i
-                      << std::setw(9) << pin_odd
-                      << std::setw(12) << info.function
-                      << std::setw(7) << (info.gpio_num >= 0 ? std::to_string(info.gpio_num) : "-")
-                      << std::setw(15) << (info.pwm_chip.empty() ? "-" : info.pwm_chip + "/" + std::to_string(info.pwm_channel))
-                      << std::setw(20) << info.notes;
+            std::cout << std::setw(6) << pin_odd
+                      << std::setw(8) << pin_odd_name
+                      << std::setw(11) << info.function
+                      << std::setw(7) << (info.gpio_num >= 0 ? std::to_string(info.gpio_num) : "-");
         } else {
-            std::cout << std::setw(69) << " ";
+            std::cout << std::setw(32) << "";
         }
         
         std::cout << "||  ";
         
-        // Row 2 (even pins)
+        // Row number and even pin
+        std::cout << std::left << std::setw(6) << row;
         if (it_even != p8_pins.end()) {
             const PinInfo& info = it_even->second;
-            std::cout << std::left << std::setw(6) << (i + 1)
-                      << std::setw(9) << pin_even
-                      << std::setw(12) << info.function
-                      << std::setw(7) << (info.gpio_num >= 0 ? std::to_string(info.gpio_num) : "-")
-                      << std::setw(15) << (info.pwm_chip.empty() ? "-" : info.pwm_chip + "/" + std::to_string(info.pwm_channel))
-                      << info.notes;
+            std::cout << std::setw(6) << pin_even
+                      << std::setw(8) << pin_even_name
+                      << std::setw(11) << info.function
+                      << (info.gpio_num >= 0 ? std::to_string(info.gpio_num) : "-");
         }
-        
+
         std::cout << "\n";
     }
-    
+
     std::cout << "\n";
-    
-    // P9 Header - side by side layout
+
+    // P9 Header - compact side by side layout
     std::cout << "P9 Header:\n";
-    std::cout << "Row1  Pin      Function    GPIO#  PWM            Notes              ||  Row2  Pin      Function    GPIO#  PWM            Notes\n";
-    std::cout << std::string(150, '=') << "\n";
+    std::cout << "Row1        Pin     Function   GPIO#  ||  Row2       Pin     Function    GPIO#\n";
+    std::cout << "==============================================================================\n";
     
-    for (int i = 1; i <= 42; i += 2) {
-        std::string pin_odd = "P9." + std::to_string(i);
-        std::string pin_even = "P9." + std::to_string(i + 1);
-        
-        std::map<std::string, PinInfo>::const_iterator it_odd = p9_pins.find(pin_odd);
-        std::map<std::string, PinInfo>::const_iterator it_even = p9_pins.find(pin_even);
-        
-        // Row 1 (odd pins)
+    for (int row = 1; row <= 23; row++) {
+        int pin_odd = row * 2 - 1;
+        int pin_even = row * 2;
+
+        std::string pin_odd_name = "P9." + std::to_string(pin_odd);
+        std::string pin_even_name = "P9." + std::to_string(pin_even);
+
+        auto it_odd = p9_pins.find(pin_odd_name);
+        auto it_even = p9_pins.find(pin_even_name);
+
+        // Row number and odd pin
+        std::cout << std::left << std::setw(6) << row;
         if (it_odd != p9_pins.end()) {
             const PinInfo& info = it_odd->second;
-            std::cout << std::left << std::setw(6) << i
-                      << std::setw(9) << pin_odd
-                      << std::setw(12) << info.function
-                      << std::setw(7) << (info.gpio_num >= 0 ? std::to_string(info.gpio_num) : "-")
-                      << std::setw(15) << (info.pwm_chip.empty() ? "-" : info.pwm_chip + "/" + std::to_string(info.pwm_channel))
-                      << std::setw(20) << info.notes;
+            std::cout << std::setw(6) << pin_odd
+                      << std::setw(8) << pin_odd_name
+                      << std::setw(11) << info.function
+                      << std::setw(7) << (info.gpio_num >= 0 ? std::to_string(info.gpio_num) : "-");
         } else {
-            std::cout << std::setw(69) << " ";
+            std::cout << std::setw(32) << "";
         }
         
         std::cout << "||  ";
         
-        // Row 2 (even pins)
+        // Row number and even pin
+        std::cout << std::left << std::setw(6) << row;
         if (it_even != p9_pins.end()) {
             const PinInfo& info = it_even->second;
-            std::cout << std::left << std::setw(6) << (i + 1)
-                      << std::setw(9) << pin_even
+            std::cout << std::setw(6) << pin_even
+                      << std::setw(8) << pin_even_name
                       << std::setw(12) << info.function
-                      << std::setw(7) << (info.gpio_num >= 0 ? std::to_string(info.gpio_num) : "-")
-                      << std::setw(15) << (info.pwm_chip.empty() ? "-" : info.pwm_chip + "/" + std::to_string(info.pwm_channel))
-                      << info.notes;
+                      << (info.gpio_num >= 0 ? std::to_string(info.gpio_num) : "-");
         }
         
         std::cout << "\n";

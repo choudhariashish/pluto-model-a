@@ -2,6 +2,8 @@
 #define LIB_PHAL
 
 #include "PObject.h"
+#include <thread>
+#include <string>
 
 class HalObject : public PObject
 {
@@ -36,7 +38,7 @@ public:
         HAL_GPIO_19,     /* P8.17  GPIO27              */
         HAL_GPIO_20,     /* P8.18  GPIO65              */
         HAL_GPIO_MAX
-    }
+    };
 
     HalGpio(const char* name) : HalObject(name) { setType(PObject::ObjectLevel::PL_HAL, PObject::ObjectHalType::PL_GPIO); }
     ~HalGpio() { settings_.risingEdgeDetection = false; };
@@ -44,8 +46,9 @@ public:
     /// Configure the object.
     struct Settings_t
     {
-        volatile PObject::State_t mode;             // PL_INPUT/PL_OUTPUT/PL_RISING_EVENT_COUNT.
-        volatile uint64_t debounceTimeMs;           // Debounce time in milliseconds for rising edge events.
+        int gpio;                          // GPIO number (HAL_GPIO_1, HAL_GPIO_2, etc.)
+        volatile PObject::State_t mode;    // PL_INPUT/PL_OUTPUT/PL_RISING_EVENT_COUNT.
+        volatile uint64_t debounceTimeMs;  // Debounce time in milliseconds for rising edge events.
         volatile bool risingEdgeDetection; // Whether to detect rising edges.
     };
 
