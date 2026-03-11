@@ -140,20 +140,21 @@ echo "PWM initialization complete"
 # ====================================================================
 echo "Exporting GPIOs..."
 
-# P9.11 = GPIO30
-echo 30 > /sys/class/gpio/export
-sleep 0.1
-
-# P8.14 = GPIO26
-echo 26 > /sys/class/gpio/export
-sleep 0.1
-
-# P9.26 = GPIO14
-echo 14 > /sys/class/gpio/export
-sleep 0.1
-
-# P8.12 = GPIO44
-echo 44 > /sys/class/gpio/export
+echo 30 > /sys/class/gpio/export # P9.11 = GPIO30
+echo 26 > /sys/class/gpio/export # P8.14 = GPIO26
+echo 14 > /sys/class/gpio/export # P9.26 = GPIO14
+echo 44 > /sys/class/gpio/export # P8.12 = GPIO44
+echo 115 > /sys/class/gpio/export # P9.27 = GPIO115
+echo 112 > /sys/class/gpio/export # P9.30 = GPIO112
+echo 66 > /sys/class/gpio/export # P8.7 = GPIO66
+echo 67 > /sys/class/gpio/export # P8.8 = GPIO67
+echo 69 > /sys/class/gpio/export # P8.9 = GPIO69
+echo 68 > /sys/class/gpio/export # P8.10 = GPIO68
+echo 45 > /sys/class/gpio/export # P8.11 = GPIO45
+echo 47 > /sys/class/gpio/export # P8.15 = GPIO47
+echo 46 > /sys/class/gpio/export # P8.16 = GPIO46
+echo 27 > /sys/class/gpio/export # P8.17 = GPIO27
+echo 65 > /sys/class/gpio/export # P8.18 = GPIO65
 sleep 0.1
 
 echo "GPIO initialization complete"

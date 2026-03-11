@@ -61,22 +61,22 @@ sshpass -p "$PASSWORD" scp -o StrictHostKeyChecking=no "$BINARY_PATH" "$USERNAME
 
 # Copy init script
 echo "[4/5] Copying initialization script..."
-sshpass -p "$PASSWORD" scp -o StrictHostKeyChecking=no "$SCRIPT_DIR/init-bbb-drive-demo.sh" "$USERNAME@$IP_ADDRESS:$REMOTE_TEMP_DIR/"
+sshpass -p "$PASSWORD" scp -o StrictHostKeyChecking=no "$WORKSPACE_ROOT/lib/PHal/config/init-bbb-hardware.sh" "$USERNAME@$IP_ADDRESS:$REMOTE_TEMP_DIR/"
 
 # Install binary and init script
 echo "[5/5] Installing binary and initialization script..."
 sshpass -p "$PASSWORD" ssh -o StrictHostKeyChecking=no "$USERNAME@$IP_ADDRESS" << EOF
 cd $REMOTE_TEMP_DIR
 chmod +x $BINARY_NAME
-chmod +x init-bbb-drive-demo.sh
+chmod +x init-bbb-hardware.sh
 
 # Install binary to /usr/local/bin
 echo "$PASSWORD" | sudo -S cp $BINARY_NAME $BINARY_INSTALL_PATH/$BINARY_NAME
 echo "$PASSWORD" | sudo -S chmod +x $BINARY_INSTALL_PATH/$BINARY_NAME
 
 # Install init script
-echo "$PASSWORD" | sudo -S cp init-bbb-drive-demo.sh /usr/local/bin/init-bbb-drive-demo.sh
-echo "$PASSWORD" | sudo -S chmod +x /usr/local/bin/init-bbb-drive-demo.sh
+echo "$PASSWORD" | sudo -S cp init-bbb-hardware.sh /usr/local/bin/init-bbb-hardware.sh
+echo "$PASSWORD" | sudo -S chmod +x /usr/local/bin/init-bbb-hardware.sh
 
 # Create systemd service
 echo "$PASSWORD" | sudo -S tee /etc/systemd/system/bbb-drive-demo-init.service > /dev/null << 'SERVICEEOF'
@@ -87,7 +87,7 @@ Before=network.target
 
 [Service]
 Type=oneshot
-ExecStart=/usr/local/bin/init-bbb-drive-demo.sh
+ExecStart=/usr/local/bin/init-bbb-hardware.sh
 RemainAfterExit=yes
 StandardOutput=journal
 StandardError=journal
