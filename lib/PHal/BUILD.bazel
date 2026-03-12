@@ -10,6 +10,10 @@ cc_library(
     deps = [
         "//lib/PObject:PObject",
     ],
+    copts = select({
+        "//platforms/bbb:bbb_platform": ["-DPLATFORM=BBB"],
+        "//conditions:default": [],
+    }),
     linkopts = select({
         "//toolchains:aarch64": ["-lgpiod"],
         "//conditions:default": [],
