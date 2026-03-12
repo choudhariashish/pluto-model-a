@@ -1,0 +1,16 @@
+cc_binary(
+    name = "bbb-pwm-demo",
+    srcs = [
+        "main.cpp",
+    ],
+    copts = [
+        "-std=c++11",
+        "-Wall",
+        "-O2",
+    ],
+    deps = [
+        "//lib/PHal",
+        "//lib/PObject",
+    ],
+    visibility = ["//visibility:public"],
+)

@@ -11,7 +11,7 @@ cc_library(
         "//lib/PObject:PObject",
     ],
     copts = select({
-        "//platforms/bbb:bbb_platform": ["-DPLATFORM=BBB"],
+        "//platforms/bbb:bbb": ["-DPLATFORM=BBB"],
         "//conditions:default": [],
     }),
     linkopts = select({

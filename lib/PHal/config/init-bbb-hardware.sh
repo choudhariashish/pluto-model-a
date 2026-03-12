@@ -93,35 +93,35 @@ sleep 1
 echo "Configuring PWM outputs to 2 kHz..."
 
 # P9.14 - EHRPWM1A
-if [ -d /sys/devices/ocp.3/pwm_test_P9_14.15 ]; then
-    echo 500000 > /sys/devices/ocp.3/pwm_test_P9_14.15/period
-    echo 0 > /sys/devices/ocp.3/pwm_test_P9_14.15/duty
-    echo 1 > /sys/devices/ocp.3/pwm_test_P9_14.15/run
-    echo "P9.14 configured (period: $(cat /sys/devices/ocp.3/pwm_test_P9_14.15/period) ns)"
+if [ -d /sys/devices/ocp.3/pwm_test_P9_14.* ]; then
+    echo 500000 > /sys/devices/ocp.3/pwm_test_P9_14.*/period
+    echo 0 > /sys/devices/ocp.3/pwm_test_P9_14.*/duty
+    echo 1 > /sys/devices/ocp.3/pwm_test_P9_14.*/run
+    echo "P9.14 configured (period: $(cat /sys/devices/ocp.3/pwm_test_P9_14.*/period) ns)"
 fi
 
 # P9.16 - EHRPWM1B
-if [ -d /sys/devices/ocp.3/pwm_test_P9_16.17 ]; then
-    echo 500000 > /sys/devices/ocp.3/pwm_test_P9_16.17/period
-    echo 0 > /sys/devices/ocp.3/pwm_test_P9_16.17/duty
-    echo 1 > /sys/devices/ocp.3/pwm_test_P9_16.17/run
-    echo "P9.16 configured (period: $(cat /sys/devices/ocp.3/pwm_test_P9_16.17/period) ns)"
+if [ -d /sys/devices/ocp.3/pwm_test_P9_16.* ]; then
+    echo 500000 > /sys/devices/ocp.3/pwm_test_P9_16.*/period
+    echo 0 > /sys/devices/ocp.3/pwm_test_P9_16.*/duty
+    echo 1 > /sys/devices/ocp.3/pwm_test_P9_16.*/run
+    echo "P9.16 configured (period: $(cat /sys/devices/ocp.3/pwm_test_P9_16.*/period) ns)"
 fi
 
 # P9.21 - EHRPWM0B
-if [ -d /sys/devices/ocp.3/pwm_test_P9_21.16 ]; then
-    echo 500000 > /sys/devices/ocp.3/pwm_test_P9_21.16/period
-    echo 0 > /sys/devices/ocp.3/pwm_test_P9_21.16/duty
-    echo 1 > /sys/devices/ocp.3/pwm_test_P9_21.16/run
-    echo "P9.21 configured (period: $(cat /sys/devices/ocp.3/pwm_test_P9_21.16/period) ns)"
+if [ -d /sys/devices/ocp.3/pwm_test_P9_21.* ]; then
+    echo 500000 > /sys/devices/ocp.3/pwm_test_P9_21.*/period
+    echo 0 > /sys/devices/ocp.3/pwm_test_P9_21.*/duty
+    echo 1 > /sys/devices/ocp.3/pwm_test_P9_21.*/run
+    echo "P9.21 configured (period: $(cat /sys/devices/ocp.3/pwm_test_P9_21.*/period) ns)"
 fi
 
 # P9.22 - EHRPWM0A
-if [ -d /sys/devices/ocp.3/pwm_test_P9_22.18 ]; then
-    echo 500000 > /sys/devices/ocp.3/pwm_test_P9_22.18/period
-    echo 0 > /sys/devices/ocp.3/pwm_test_P9_22.18/duty
-    echo 1 > /sys/devices/ocp.3/pwm_test_P9_22.18/run
-    echo "P9.22 configured (period: $(cat /sys/devices/ocp.3/pwm_test_P9_22.18/period) ns)"
+if [ -d /sys/devices/ocp.3/pwm_test_P9_22.* ]; then
+    echo 500000 > /sys/devices/ocp.3/pwm_test_P9_22.*/period
+    echo 0 > /sys/devices/ocp.3/pwm_test_P9_22.*/duty
+    echo 1 > /sys/devices/ocp.3/pwm_test_P9_22.*/run
+    echo "P9.22 configured (period: $(cat /sys/devices/ocp.3/pwm_test_P9_22.*/period) ns)"
 fi
 
 # P8.19 - EHRPWM2A

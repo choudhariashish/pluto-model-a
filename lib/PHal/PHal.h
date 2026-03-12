@@ -81,34 +81,45 @@ private:
 
 class HalPwm : public HalObject
 {
-#define MAX_FILE_PATH    256
 public:
+    enum                /*         Platform            */
+    {                   /*     bbb              orin   */
+        HAL_PWM_1,      /* P9.14  PWM1A                */
+        HAL_PWM_2,      /* P9.16  PWM1B                */
+        HAL_PWM_3,      /* P9.21  PWM2A                */
+        HAL_PWM_4,      /* P9.22  PWM2B                */
+        HAL_PWM_5,      /* P8.19  PWM3A                */
+    };
+
     HalPwm(const char* name) : HalObject(name) { setType(PObject::ObjectLevel::PL_HAL, PObject::ObjectHalType::PL_PWM); }
+    ~HalPwm() { enable(PObject::State_t::PL_DISABLE); };
+
+    struct Settings_t
+    {
+        int pwm;
+    };
+
+    /// Runtime data of the object.
+    struct Data_t
+    {
+        volatile int duty;
+        volatile int dutyPercent;
+    };
+
     Status_t initialize(void) override;
     Status_t shutdown(void) override;
 
     // PObject::State_t::ENABLE/DISABLE.
     Status_t enable(PObject::State_t state);
-    Status_t setPeriod(int period);
     Status_t setDuty(int duty);
     Status_t setDutyPercent(int dutyPercent);
 
-    struct Settings_t
-    {
-        const char* modulePath;
-        char periodFilePath[MAX_FILE_PATH];
-        char dutyFilePath[MAX_FILE_PATH];
-        char enableFilePath[MAX_FILE_PATH];
-        FILE* periodFile;
-        FILE* dutyFile;
-        FILE* enableFile;
-        int period;
-        int duty;
-        PObject::State_t enable; // PObject::State_t::ENABLE/DISABLE.
-    };
     Settings_t* getSettings(void) { return &settings_; }
+    Data_t* getData(void) { return &data_; }
 
 private:
     struct Settings_t settings_;
+    struct Data_t data_;
+    std::string pwmPath_ = "/sys/devices/ocp.3/pwm_test_PX_X/";
 };
 #endif // LIB_PHAL

@@ -7,3 +7,10 @@ platform(
         "@platforms//cpu:armv7",
     ],
 )
+
+config_setting(
+    name = "bbb",
+    constraint_values = [
+        "@platforms//cpu:armv7",
+    ],
+)
