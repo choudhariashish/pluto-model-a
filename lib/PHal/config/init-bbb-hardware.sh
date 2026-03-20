@@ -144,6 +144,11 @@ echo 30 > /sys/class/gpio/export # P9.11 = GPIO30
 echo 26 > /sys/class/gpio/export # P8.14 = GPIO26
 echo 14 > /sys/class/gpio/export # P9.26 = GPIO14
 echo 44 > /sys/class/gpio/export # P8.12 = GPIO44
+echo 60 > /sys/class/gpio/export # P9.12  GPIO60
+echo 31 > /sys/class/gpio/export # P9.13  GPIO31
+echo 48 > /sys/class/gpio/export # P9.15  GPIO48
+echo 49 > /sys/class/gpio/export # P9.23  GPIO49
+echo 15 > /sys/class/gpio/export # P9.24  GPIO15
 echo 115 > /sys/class/gpio/export # P9.27 = GPIO115
 echo 112 > /sys/class/gpio/export # P9.30 = GPIO112
 echo 66 > /sys/class/gpio/export # P8.7 = GPIO66
